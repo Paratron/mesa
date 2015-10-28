@@ -1,0 +1,24 @@
+{
+   "left": {
+	  "btnAdd": "New page or group",
+	  "btnLanguage": "Select language",
+	  "defaultLanguage": "Default language",
+	  "noPages": "No pages or groups created"
+   },
+   "dlgNewNode": {
+	  "title": "New Node",
+	  "form": {
+		 "lblTitle": "Title",
+		 "lblFragment": "URL fragment",
+		 "lblStruct": "Content structure",
+		 "lblNoStructSelected": "None",
+		 "lblNoStructs": "No structs avaliable",
+		 "lblTemplate": "Frontend template",
+		 "lblNoTemplateSelected": "None",
+		 "lblNoTemplates": "No templates available",
+		 "btnReset": "Reset"
+	  },
+	  "btnCancel": "Cancel",
+	  "btnConfirm": "Create node"
+   }
+}

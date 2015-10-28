@@ -1,0 +1,148 @@
+.mdo-popup {
+  position: absolute;
+  top: 15vh;
+  left: 50%;
+  margin-left: -250px;
+  width: 500px;
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  max-height: 90vh;
+
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity .2s, transform .2s;
+
+  &.effect{
+	transform: scale(1.5);
+	opacity: 0;
+  }
+
+  &.mdo-popbox {
+	position: fixed;
+  }
+
+  .tme-content {
+	max-height: calc(~'90vh - 52px');
+	//overflow-y: auto;
+	padding: 0 20px;
+	font-size: 16px;
+	color: #474747;
+	box-sizing: border-box;
+
+	& > .mdo-element {
+	  max-width: 600px;
+	  margin: 0 auto;
+	}
+
+	&.tme-has-footer {
+	  max-height: calc(~'90vh - 131px');
+	}
+
+	&.tme-has-tabs {
+	  max-height: calc(~'90vh - 99px');
+	}
+
+	&.tme-has-footer.tme-has-tabs {
+	  max-height: calc(~'90vh - 177px');
+	}
+
+	.mdo-label {
+	  margin-bottom: 20px;
+	}
+
+	.errorlabel{
+	  margin-bottom: 0;
+	}
+  }
+
+  .mdo-togglegroup.tme-tabbar {
+	margin: 0;
+	text-align: center;
+  }
+
+  .tme-footer {
+	padding: 20px;
+	text-align: right;
+
+	.mdo-button {
+	  margin-right: 0;
+	  margin-left: 20px;
+	  margin-bottom: 0;
+	  background: transparent;
+	  color: @accent;
+	  font-weight: bold;
+	}
+  }
+
+  & > .tme-title {
+	padding: 20px;
+	font-size: 20px;
+	font-weight: bold;
+  }
+
+  .tme-header {
+	background: @accent;
+	color: @header-color;
+	font-size: 21px;
+	padding: 10px;
+	padding-left: 20px;
+	line-height: 32px;
+	height: 32px;
+	position: relative;
+	text-align: center;
+
+	.tme-title {
+	  width: auto;
+	  max-width: none;
+	}
+
+	.tme-close {
+	  position: absolute;
+	  width: 52px;
+	  height: 52px;
+	  top: 0;
+	  right: 0;
+	  line-height: 52px;
+	  text-align: center;
+	  font-size: 21px;
+	  background: transparent;
+	  color: darken(@accent, 20%);
+	  margin: 0;
+	  padding: 0;
+	  padding-top: 2px;
+
+	  &:hover {
+		color: #fff;
+	  }
+
+	  &:before {
+		content: "×";
+		font-size: 28px;
+	  }
+	}
+  }
+}
+
+.mdo-popup-mask {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.mdo-popup-level-2 {
+  margin-top: 20px;
+}
+
+.mdo-popup-level-3 {
+  margin-top: 40px;
+}
+
+.mdo-popup-level-4 {
+  margin-top: 60px;;
+}
+
+.mdo-popup-level-5 {
+  margin-top: 80px;
+}
+
+.mdo-popup-level-6 {
+  margin-top: 100px;
+}
