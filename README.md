@@ -6,8 +6,9 @@ Mesa CMS
 This CMS aims to be a easy to use, yet flexible CMS that helps building simple to complex websites while providing
 a clear, understandable UI for the people who need to maintain the website in the end.
 
-It should enable developers to actually build the website with the editor they are used to and structure it the way
-they are used to instead of combining it together from pre-defined content elements, given by the CMS.
+Other CMS force a developer to build a website from pre-created content blocks in a certain way the system dictates.
+Mesa goes a different way and enables the developer to use the editors he is used to and structure their websites in their
+own, preferred way.
   
 The CMS also aims to deliver the following features:
 
