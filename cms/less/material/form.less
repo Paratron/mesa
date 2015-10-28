@@ -17,8 +17,8 @@
 	right: 35px;
   }
 
-  &:hover {
-	.mdo-button.reset {
+  &:hover{
+	.mdo-button.reset{
 	  opacity: 1;
 	  transition: opacity .3s;
 	  transition-delay: .5s;
@@ -54,7 +54,7 @@
 .mdo-inputtext {
   border: none;
   background: transparent;
-  border-bottom: #aaa solid 1px;
+  border-bottom: #aaa solid 3px;
   outline: none;
   padding: 10px;
   box-sizing: border-box;
@@ -64,6 +64,7 @@
   -webkit-appearance: none;
   border-radius: 0;
   width: 100%;
+
   transition: border-color .5s;
 
   &.tme-w50 {
@@ -78,10 +79,7 @@
 
   &.mdo-inputtext-textarea {
 	resize: none;
-	overflow: hidden;
-	line-height: 1.6em;
-	font-family: Roboto, Arial, Helvetica, sans-serif;
-	font-size: 16px;
+	line-height: 1em;
   }
 
   &.mdo-autogrow {
@@ -137,47 +135,6 @@
 	transition: top .1s ease, opacity .1s ease;
   }
 
-  .prependLabel {
-	//width: 0;
-	//overflow: hidden;
-	display: none;
-  }
-
-  &.tme-has-prependLabel {
-	display: table;
-	width: 100%;
-
-	&.mdo-filled {
-	  .prependLabel {
-		display: table-cell;
-		padding-right: 10px;
-		overflow: hidden;
-		text-align: right;
-		text-overflow: ellipsis;
-		color: #a3a3a3;
-		max-width: none;
-		width: 50px;
-	  }
-	}
-
-	.inputKeeper {
-	  display: table-row;
-	  width: 100%;
-	}
-
-	.mdo-inputtext {
-	  display: table-cell;
-	}
-
-	.prependLabel {
-	  max-width: 0;
-	  width: 0;
-	  overflow: hidden;
-	  display: none;
-	  transition: width .3s, max-width .3s;
-	}
-  }
-
   .errorlabel {
 	color: @error;
 	font-size: 12px;
@@ -188,7 +145,6 @@
   }
 
   .mdo-inputtext {
-	display: inline-block;
 	font-size: 16px;
 	font-weight: normal;
 	padding: 0;
@@ -196,6 +152,12 @@
 	border-bottom: #ccc solid;
 	border-width: 1px;
 	font-family: Roboto, Arial, Helvetica, sans-serif;
+
+	background-image: url(../img/icons/tick.svg);
+	background-repeat: no-repeat;
+	background-position: right top;
+	background-size: 0;
+	transition: background-size .3s;
 
 	&:focus {
 	  border-color: @accent;
@@ -217,6 +179,7 @@
 	  border-bottom-color: @success;
 	  transition: border-color .5s;
 	  position: relative;
+	  background: url(../img/icons/tick.svg) right center no-repeat;
 	}
   }
 

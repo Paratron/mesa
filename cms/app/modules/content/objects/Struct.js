@@ -18,31 +18,7 @@ define([], function () {
 			definition: null,       //JSON definition object of the struct
 			fetched: false          //Has the full struct been fetched from the server so far?
 		},
-		idAttribute: 'key',
-		/**
-		 * Fetches the struct definition from the server, if necessary.
-		 * @returns {*}
-		 */
-		fetch: function(){
-			if(this.attributes.definition){
-				return Q.resolve(this.attributes.definition);
-			}
-
-			var defer = Q.defer(),
-				that = this;
-
-			require(['modules/restapi'], function(api){
-				api('get', '/struct/' + that.id)
-					.then(function(result){
-						that.attributes.definition = result;
-						defer.resolve(result);
-					}).catch(function(error){
-						defer.reject(error);
-					}).done();
-			});
-
-			return defer.promise;
-		}
+		idAttribute: 'key'
 	});
 
 	var StructCollection = Backbone.Collection.extend({

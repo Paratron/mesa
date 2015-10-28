@@ -52,14 +52,6 @@ define([
 						key: 'title',
 						params: {
 							placeholder: mLang.form.lblTitle
-						},
-						on: {
-							keydown: function(){
-								var that = this;
-								setTimeout(function(){
-									ui.txtFragment.set(central.fragmentize(that.get()));
-								}, 1);
-							}
 						}
 					},
 					{
@@ -196,7 +188,7 @@ define([
 							click: function(){
 								var dta = ui.frmData.get();
 
-								dta.parentId = central.get('parentNode').id;
+								dta.parentNode = central.get('parentNode');
 
 								require('modules/restapi')('post', '/node', dta)
 									.then(function(result){
@@ -216,15 +208,12 @@ define([
 
 	return {
 		open: function () {
-			ui.txtFragment.prependLabel(central.get('parentNode').getPath() + '/');
 			ui.ddnStruct.setDataset(central.get('structs'));
 			ui.ddnTemplate.setDataset(central.get('templates'));
 			ui.frmData.set();
 			ui.window.el.addClass('effect');
 			ui.window.open();
 			ui.txtTitle.focus();
-
-			central.updateDefinitions();
 		}
 	}
 });

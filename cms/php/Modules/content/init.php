@@ -2,11 +2,10 @@
 	namespace Modules\content;
 	require 'OBJECT_Node.php';
 	require 'REST_Node.php';
-	require 'REST_Struct.php';
 
 	global $moduleManager;
 
-	function fetchContentPayload($inData, $noNodes = FALSE){
+	function fetchContentPayload($inData){
 		global $cache;
 
 		$checksum = '';
@@ -50,9 +49,7 @@
 		$inData['structs'] = $structs;
 		$inData['templates'] = $templates;
 
-		if(!$noNodes){
-			$inData['nodes'] = \CMS\Objects\Node::getPayload();
-		}
+		$inData['nodes'] = \CMS\Objects\Node::getPayload();
 
 		return $inData;
 	}

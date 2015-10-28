@@ -1,8 +1,5 @@
 <?php
 
-$mesaConfig = parse_ini_file('../lib/data/config.ini');
-
-
 require 'Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 
@@ -10,19 +7,7 @@ $app = new \Slim\Slim(array(
 		'view' => new \Slim\Views\Twig()
 ));
 
-$cache = NULL;
-if($mesaConfig['cache'] === 'harddrive'){
-	require 'Kiss/KVWrappers/Filesystem.php';
-	$cache = new \Kiss\KVWrappers\Filesystem('../' . $mesaConfig['cacheFolder']);
-}
-if($mesaConfig['cache'] === 'memcached'){
-	require 'Kiss/KVWrappers/Memcached.php';
-	$cache = new \Kiss\KVWrappers\Memcached();
-}
-if(!$cache){
-	require 'Kiss/KVWrappers/Nullcache.php';
-	$cache = new \Kiss\KVWrappers\Nullcache();
-}
+$cache = new \Kiss\KVWrappers\Filesystem('../lib/data/cache');
 
 $db = new \Kiss\SQLite('../lib/data/content.s3db');
 
@@ -107,13 +92,13 @@ $app->map('/api/:route+', function ($route) use ($app) {
 	}
 
 	if (!isset($_GET['token']) && $route[0] !== 'user') {
-		errorResponse('No access token given', 403, 0);
+		errorResponse('No access token given', 501, 0);
 	}
 
 	global $cache;
 
 	if ($node !== 'User' && !$cache->get('token_' . $_GET['token'])) {
-		errorResponse('Invalid access token given', 403, 1);
+		errorResponse('Invalid access token given', 501, 1);
 	}
 
 	$c = new $className();

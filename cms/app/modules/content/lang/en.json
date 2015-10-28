@@ -1,14 +1,9 @@
 {
    "left": {
 	  "btnAdd": "New page or group",
-	  "btnSites": "Select website/language",
-	  "btnNewSite": "Create a new website / language",
+	  "btnLanguage": "Select language",
+	  "defaultLanguage": "Default language",
 	  "noPages": "No pages or groups created"
-   },
-   "main": {
-	  "btnEditMeta": "Edit meta information",
-	  "btnPublish": "Make changes public",
-	  "btnDelete": "Remove this node"
    },
    "dlgNewNode": {
 	  "title": "New Node",
@@ -25,13 +20,5 @@
 	  },
 	  "btnCancel": "Cancel",
 	  "btnConfirm": "Create node"
-   },
-   "contentElements": {
-	  "_all": {
-		 "btnAddMore": "Add more",
-		 "noMoreAdd": "Only %count% elements allowed.",
-		 "sort": "Re-order",
-		 "remove": "Remove"
-	  }
    }
 }
