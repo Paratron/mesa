@@ -1,6 +1,8 @@
 Mesa CMS
 ========
 
+![The mesa logo](logo/logo128.png)
+
 This CMS aims to be a easy to use, yet flexible CMS that helps building simple to complex websites while providing
 a clear, understandable UI for the people who need to maintain the website in the end.
 
