@@ -1,19 +1,10 @@
 module.exports = function (grunt) {
 	'use strict';
 
-	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	grunt.initConfig({
-		uglify: {
-			main: {
-				files: {
-					'dist/lib/frontend/_inject.src.min.js': ['src/lib/frontend/_inject.src.js'],
-					'dist/lib/js/detect-zoom.min.js': 'src/lib/js/detect-zoom.js'
-				}
-			}
-		},
 		copy: {
 			jsLang: {
 				files: {
@@ -38,5 +29,5 @@ module.exports = function (grunt) {
 		}
 	});
 
-	grunt.registerTask('default', ['less', 'uglify', 'copy']);
+	grunt.registerTask('default', ['less', 'copy']);
 };
