@@ -244,7 +244,7 @@ class Node
 	{
 		global $db;
 
-		$result = $db->queryAll('SELECT id, title, parentId, structKey FROM ' . self::$dbTable . ' WHERE parentId = 0 OR parentId IN(SELECT id FROM ' . self::$dbTable . ' WHERE parentId = 0);');
+		$result = $db->queryAll('SELECT id, title, parentId, structKey, urlFragment FROM ' . self::$dbTable . ' WHERE parentId = 0 OR parentId IN(SELECT id FROM ' . self::$dbTable . ' WHERE parentId = 0);');
 
 		return $result;
 	}

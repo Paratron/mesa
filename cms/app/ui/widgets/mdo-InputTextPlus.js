@@ -66,7 +66,13 @@
 			}
 		});
 
-		this.el.append(this._inputEl.el, this._errorLabel.el);
+		this._prependLabel = $('<div class="prependLabel"></div>');
+
+		this._inputKeeper = $('<div class="inputKeeper"></div>');
+
+		this._inputKeeper.append(this._prependLabel, this._inputEl.el);
+
+		this.el.append(this._inputKeeper, this._errorLabel.el);
 
 		if(params.saveButton){
 			this.el.append(this._saveButton.el);
@@ -266,6 +272,19 @@
 				this.removeClass('tme-active tme-error tme-success', false);
 				this.setError();
 				return this;
+			},
+			/**
+			 * Will set a text label that should be shown in the label right in front
+			 * of the user submitted text.
+			 * @param label
+			 */
+			prependLabel: function(label){
+				if(label){
+					this.addClass('tme-has-prependLabel', false);
+				} else {
+					this.removeClass('tme-has-prependLabel', false);
+				}
+				this._prependLabel.html(label);
 			},
 			/**
 			 * Will take the keyboard focus from the elements DOM object.

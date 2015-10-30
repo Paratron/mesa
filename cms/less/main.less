@@ -7,6 +7,10 @@ html, body {
   overflow: hidden;
 }
 
+div, span{
+  cursor: default;
+}
+
 .panel {
   border: #fff solid 1px;
   background: #f4f4f4;
@@ -174,13 +178,21 @@ html, body {
 	background: #fbfbfb;
 	border-bottom: #e8e8e8 solid 1px;
 	padding: 10px;
-	padding-bottom: 0;
+	padding-bottom: 5px;
 	position: relative;
+
+	font-size: 14px;
 
 	.mdo-button {
 	  background: transparent;
 	  margin-bottom: 0;
 	  padding: 5px;
+	}
+
+	.mdo-label{
+	  display: inline-block;
+	  line-height: 38px;
+	  vertical-align: top;
 	}
   }
 
@@ -193,51 +205,13 @@ html, body {
   }
 }
 
-.mdo-popupbubble {
-  border-radius: 3px;
-  width: 200px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26), 0 2px 10px 0 rgba(0, 0, 0, .16);
-  transform: scale(0.01);
-  opacity: 0;
-  transform-origin: top left;
-  transition: opacity .3s, transform .3s;
-
-  &-attach-rb {
-	margin-left: 10px;
-	margin-top: 30px;
-  }
-
-  &.mdo-popup-level-1 {
-	opacity: 1;
-	transform: scale(1);
-	transition: opacity .2s, transform .2s;
-  }
-
-  .mdo-list {
-	padding: 10px 0;
-
-	.mdo-list-item {
-	  height: 40px;
-	  line-height: 40px;
-	  padding-left: 10px;
-	  cursor: pointer;
-	  font-size: 14px;
-
-	  &:hover {
-		background: #f4f4f4;
-
-	  }
-	}
-  }
-}
-
 .lstPages {
   font-size: 14px;
   padding-bottom: 65px;
 
   .mdo-list-item {
-	padding: 20px;
-	padding-left: 15px;
+	padding: 15px;
+	padding-bottom: 10px;
 	line-height: 24px;
 	cursor: pointer;
 
@@ -250,8 +224,7 @@ html, body {
 	  font-family: 'Material Icons';
 	  font-weight: normal;
 	  font-style: normal;
-	  font-size: 24px;
-	  line-height: 1;
+	  font-size: 18px;
 	  letter-spacing: normal;
 	  text-transform: none;
 	  white-space: nowrap;
@@ -259,8 +232,12 @@ html, body {
 	  direction: ltr;
 	  -webkit-font-feature-settings: 'liga';
 	  -webkit-font-smoothing: antialiased;
-	  width: 24px;
-	  height: 24px;
+	  width: 32px;
+	  height: 32px;
+	  background: #fff;
+	  text-align: center;
+	  line-height: 32px;
+	  border-radius: 50%;
 	  display: inline-block;
 	  vertical-align: middle;
 	  position: relative;
@@ -275,6 +252,31 @@ html, body {
 
 	&.folder:before{
 	  content: "folder";
+	}
+
+	&:hover:before, &.selected:before{
+	  box-shadow: 0 1px 1px rgba(0,0,0,0.3);
+	}
+
+	&.selected{
+	  background: #4285f4;
+	  color: #fff;
+
+	  &:hover{
+		background: darken(#4285f4, 5%);
+	  }
+	}
+
+	&.mdo-list-empty-element{
+	  cursor: default;
+
+	  &:before{
+		display: none;
+	  }
+
+	  &:hover{
+		background: transparent;
+	  }
 	}
   }
 }

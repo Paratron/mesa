@@ -17,8 +17,8 @@
 	right: 35px;
   }
 
-  &:hover{
-	.mdo-button.reset{
+  &:hover {
+	.mdo-button.reset {
 	  opacity: 1;
 	  transition: opacity .3s;
 	  transition-delay: .5s;
@@ -135,6 +135,47 @@
 	transition: top .1s ease, opacity .1s ease;
   }
 
+  .prependLabel {
+	//width: 0;
+	//overflow: hidden;
+	display: none;
+  }
+
+  &.tme-has-prependLabel {
+	display: table;
+	width: 100%;
+
+	&.mdo-filled {
+	  .prependLabel {
+		display: table-cell;
+		padding-right: 10px;
+		overflow: hidden;
+		text-align: right;
+		text-overflow: ellipsis;
+		color: #a3a3a3;
+		max-width: none;
+		width: 50px;
+	  }
+	}
+
+	.inputKeeper {
+	  display: table-row;
+	  width: 100%;
+	}
+
+	.mdo-inputtext {
+	  display: table-cell;
+	}
+
+	.prependLabel {
+	  max-width: 0;
+	  width: 0;
+	  overflow: hidden;
+	  display: none;
+	  transition: width .3s, max-width .3s;
+	}
+  }
+
   .errorlabel {
 	color: @error;
 	font-size: 12px;
@@ -145,6 +186,7 @@
   }
 
   .mdo-inputtext {
+	display: inline-block;
 	font-size: 16px;
 	font-weight: normal;
 	padding: 0;
