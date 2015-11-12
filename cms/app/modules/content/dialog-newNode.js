@@ -216,13 +216,15 @@ define([
 
 	return {
 		open: function () {
-			ui.txtFragment.prependLabel(central.get('parentNode').getPath());
+			ui.txtFragment.prependLabel(central.get('parentNode').getPath() + '/');
 			ui.ddnStruct.setDataset(central.get('structs'));
 			ui.ddnTemplate.setDataset(central.get('templates'));
 			ui.frmData.set();
 			ui.window.el.addClass('effect');
 			ui.window.open();
 			ui.txtTitle.focus();
+
+			central.updateDefinitions();
 		}
 	}
 });

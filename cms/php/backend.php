@@ -92,13 +92,13 @@ $app->map('/api/:route+', function ($route) use ($app) {
 	}
 
 	if (!isset($_GET['token']) && $route[0] !== 'user') {
-		errorResponse('No access token given', 501, 0);
+		errorResponse('No access token given', 403, 0);
 	}
 
 	global $cache;
 
 	if ($node !== 'User' && !$cache->get('token_' . $_GET['token'])) {
-		errorResponse('Invalid access token given', 501, 1);
+		errorResponse('Invalid access token given', 403, 1);
 	}
 
 	$c = new $className();

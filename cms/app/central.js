@@ -45,7 +45,9 @@ define([], function () {
 			modules[moduleName] = module;
 
 			if (module.getUI) {
-				central.trigger('injectModuleUI', _.extend(module.getUI(), {moduleKey: moduleName}));
+				module.getUI().then(function(struct){
+					central.trigger('injectModuleUI', _.extend(struct, {moduleKey: moduleName}));
+				});
 			}
 
 			defer.resolve(module);

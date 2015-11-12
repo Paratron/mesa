@@ -3,29 +3,33 @@
  * ======================
  * Extends the default modo InputBox to support floating labels.
  */
-(function (){
+(function () {
 	'use strict';
 
 	var modoCore;
 
 	//commonJS and AMD modularization - try to reach the core.
-	if(typeof modo !== 'undefined'){
+	if (typeof modo !== 'undefined') {
 		modoCore = modo;
 	} else {
-		if(typeof require === 'function'){
+		if (typeof require === 'function') {
 			modoCore = require('modo');
 		}
 	}
 
-	function cn(index, prefixed){
-		if(prefixed !== undefined){
+	function cn(index, prefixed) {
+		if (prefixed !== undefined) {
 			return modoCore.InputTextPlus.classNames[index];
 		}
 		return modoCore.cssPrefix + modoCore.InputTextPlus.classNames[index];
 	}
 
-	modoCore.defineElement('InputTextPlus', ['inputtextplus', 'floatlabel', 'errorlabel', 'changed'], function (params){
+	modoCore.defineElement('InputTextPlus', ['inputtextplus', 'floatlabel', 'errorlabel', 'changed'], function (params) {
+		var that = this;
+
 		params = params || {};
+
+		delete params.el;
 
 		modoCore.Element.call(this, params);
 
@@ -33,8 +37,11 @@
 
 		this.el.append('<span class="' + cn(1) + '">' + params.placeholder + '</span>');
 
-		this._inputEl = new modoCore.InputText(params);
+		if (params.multiline) {
+			params.type = 'textarea';
+		}
 
+		this._inputEl = new modoCore.InputText(params);
 		this._checkFunction = params.check;
 		this.liveCheck = !!params.liveCheck;
 		this.autosave = !!params.autosave;
@@ -42,14 +49,14 @@
 		this._saveFunction = params.save;
 		this.default = params.default || params.value || '';
 
-		if(params.saveButton){
+		if (params.saveButton) {
 			this._saveButton = new modo.Button({
 				label: params.saveButton
 			});
 
 			this._saveButton.el.attr('tabindex', '-1');
 
-			this._saveButton.on('click', function (){
+			this._saveButton.on('click', function () {
 				that.save();
 			});
 		}
@@ -74,27 +81,25 @@
 
 		this.el.append(this._inputKeeper, this._errorLabel.el);
 
-		if(params.saveButton){
+		if (params.saveButton) {
 			this.el.append(this._saveButton.el);
 		}
 
 		var labelVisible = !!params.value;
 
-		if(labelVisible){
+		if (labelVisible) {
 			this.addClass(modoCore.InputText.classNames[4]);
 		}
 
-		var that = this;
-
 		this.valid = true;
 
-		this._setLabel = function (inValue){
-			if(inValue === undefined){
+		this._setLabel = function (inValue) {
+			if (inValue === undefined) {
 				inValue = that._inputEl.get();
 			}
 
-			if(inValue){
-				if(labelVisible){
+			if (inValue) {
+				if (labelVisible) {
 					return;
 				}
 				labelVisible = true;
@@ -108,46 +113,72 @@
 			that.trigger('empty');
 		};
 
-		this.setError = function (inMessage){
+		this.setError = function (inMessage) {
 			this._errorLabel.set(inMessage || '');
 
 			/*if(inMessage){
-				this._errorLabel.show();
-			} else {
-				this._errorLabel.hide();
-			}*/
+			 this._errorLabel.show();
+			 } else {
+			 this._errorLabel.hide();
+			 }*/
 		};
 
-		this._inputEl.on('keydown', function (e){
-			setTimeout(function (){
+		if (params.multiline) {
+			var cloneKeeper = $('<div></div>');
+			var clone = $('<div></div>');
+			cloneKeeper.append(clone);
+			cloneKeeper.css({
+				'position': 'absolute',
+				'width': 1,
+				'height': 1,
+				'top': '-5px',
+				'overflow': 'hidden'
+			});
+
+			modo.waitForDom(that, function () {
+				clone.css({
+					'font-size': that._inputEl.el.css('font-size'),
+					'line-height': that._inputEl.el.css('line-height'),
+					'width': that._inputEl.el.width()
+				});
+			});
+			that.el.append(cloneKeeper);
+		}
+
+		this._inputEl.on('keydown', function () {
+			setTimeout(function () {
 				that._setLabel();
-				if(that.liveCheck){
+				if (that.liveCheck) {
 					that.check();
+				}
+				if (params.multiline) {
+					clone.html(that._inputEl.el.val().replace(/\n/g, '<br>') + '<br>');
+					that._inputEl.el.height(clone[0].scrollHeight);
 				}
 			}, 1);
 			//that.trigger('keydown', e);
 		});
 
-		this._inputEl.on('all', function (event, e){
+		this._inputEl.on('all', function (event, e) {
 			that.trigger(event, e);
 		});
 
 		var asTimeout;
 
-		this._inputEl.on('change', function (){
+		this._inputEl.on('change', function () {
 			that._setLabel();
 			that.trigger('change');
 
-			if(this.get() !== that.default){
+			if (this.get() !== that.default) {
 				that.el.addClass(cn(3));
 			} else {
 				that.el.removeClass(cn(3));
 			}
 
-			if(that.autosave){
+			if (that.autosave) {
 				clearTimeout(asTimeout);
 
-				asTimeout = setTimeout(function (){
+				asTimeout = setTimeout(function () {
 					that.save();
 				}, that.autosaveTimeout);
 			}
@@ -160,27 +191,27 @@
 			 * overwriting the this._checkFunction
 			 * The function will be auto-promised. Return something to fullfill it, throw an error to make it fail.
 			 */
-			check: function (options){
+			check: function (options) {
 				options = options || {};
 				var that = this;
 
-				if(typeof this._checkFunction === 'function'){
+				if (typeof this._checkFunction === 'function') {
 					try {
 						return Q.when(this._checkFunction.call(this, this.get()))
-							.then(function (){
-								if(!options.nonVisual){
+							.then(function () {
+								if (!options.nonVisual) {
 									that.normal();
 								}
 							})
-							.catch(function (e){
-								if(!options.nonVisual){
+							.catch(function (e) {
+								if (!options.nonVisual) {
 									that.error(e);
 								}
 								return Q.reject(e);
 							});
 					}
-					catch(e){
-						if(!options.nonVisual){
+					catch (e) {
+						if (!options.nonVisual) {
 							that.error(e);
 						}
 						return Q.reject(e);
@@ -194,20 +225,20 @@
 			 * overwriting this._saveFunction
 			 * The function will be auto-promised. Return something to fullfill it, throw an error to make it fail.
 			 */
-			save: function (){
+			save: function () {
 				var that = this;
 
-				this.check().then(function (){
-					if(typeof that._saveFunction === 'function'){
+				this.check().then(function () {
+					if (typeof that._saveFunction === 'function') {
 						that.active();
 						var r = Q.when(that._saveFunction.call(that, that.get()))
-							.then(function (){
+							.then(function () {
 								that.success();
 								that.default = that.get();
 								that.el.removeClass(cn(3));
 								return Q.resolve();
 							})
-							.fail(function (e){
+							.fail(function (e) {
 								that.error(e ? e.message : '');
 								return Q.reject(e);
 							}).done();
@@ -217,21 +248,21 @@
 					return Q.resolve();
 				});
 			},
-			set: function (value, options){
+			set: function (value, options) {
 				this._setLabel(value);
 				this._inputEl.set(value, options);
 
 				options = options || {};
 
-				if(!!options.check){
+				if (!!options.check) {
 					this.check();
 				}
 
-				if(options.default){
+				if (options.default) {
 					this.default = value;
 					this.el.removeClass(cn(3));
 				} else {
-					if(value === this.default){
+					if (value === this.default) {
 						this.el.removeClass(cn(3));
 					} else {
 						this.el.addClass(cn(3));
@@ -240,11 +271,11 @@
 
 				return this;
 			},
-			get: function (){
+			get: function () {
 				return this._inputEl.get();
 			},
-			active: function (unset){
-				if(unset === false){
+			active: function (unset) {
+				if (unset === false) {
 					this.removeClass('tme-active', false);
 					return this;
 				}
@@ -252,23 +283,23 @@
 				this.setError();
 				return this;
 			},
-			success: function (){
+			success: function () {
 				this.removeClass('tme-active', false);
 				this.addClassTemporary('tme-success', 2000, false);
 				this.setError();
 				return this;
 			},
-			error: function (message, permanent){
+			error: function (message, permanent) {
 				this.removeClass('tme-active', false);
 				this.setError(message);
-				if(permanent){
+				if (permanent) {
 					this.addClass('tme-error', false);
 				} else {
 					this.addClassTemporary('tme-error', 2000, false);
 				}
 				return this;
 			},
-			normal: function (){
+			normal: function () {
 				this.removeClass('tme-active tme-error tme-success', false);
 				this.setError();
 				return this;
@@ -278,8 +309,8 @@
 			 * of the user submitted text.
 			 * @param label
 			 */
-			prependLabel: function(label){
-				if(label){
+			prependLabel: function (label) {
+				if (label) {
 					this.addClass('tme-has-prependLabel', false);
 				} else {
 					this.removeClass('tme-has-prependLabel', false);
@@ -289,7 +320,7 @@
 			/**
 			 * Will take the keyboard focus from the elements DOM object.
 			 */
-			blur: function (){
+			blur: function () {
 				this._inputEl.blur();
 				this.trigger('blur');
 				return this;
@@ -298,38 +329,38 @@
 			/**
 			 * Will set the keyboard focus to the elements DOM object.
 			 */
-			focus: function (timeout){
-				if(!timeout){
+			focus: function (timeout) {
+				if (!timeout) {
 					this._inputEl.focus();
 					this.trigger('focus');
 				} else {
 					var that = this;
-					setTimeout(function(){
+					setTimeout(function () {
 						that._inputEl.focus();
 						that.trigger('focus');
 					}, timeout);
 				}
 				return this;
 			},
-			select: function (start, length){
+			select: function (start, length) {
 				this._inputEl.select(start, length);
 				return this;
 			},
-			disable: function (){
+			disable: function () {
 				this._inputEl.disable();
 			},
-			enable: function (){
+			enable: function () {
 				this._inputEl.enable();
 			}
 		});
 
-	if(typeof exports !== 'undefined'){
+	if (typeof exports !== 'undefined') {
 		//commonJS modularization
 		exports = modoCore.InputTextPlus;
 	} else {
-		if(typeof define === 'function'){
+		if (typeof define === 'function') {
 			//AMD modularization
-			define('InputTextPlus', [], function (){
+			define('InputTextPlus', [], function () {
 				return modoCore.InputTextPlus;
 			});
 		}

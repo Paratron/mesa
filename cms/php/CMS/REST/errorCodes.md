@@ -26,3 +26,10 @@ Node Error Codes
 9: URL fragment missing
 10: Parent node doesnt exist
 11: Another node with this urlFragment exists on this level
+
+
+Struct Error Codes
+------------------
+###Retrieving struct contents
+12: Malformed struct id
+13: Struct not found

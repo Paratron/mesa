@@ -7,3 +7,58 @@
 	margin: 10px;
 	box-shadow: 0 2px 5px #333;
 }
+.tme-panel{
+  height: calc(~'90vh - 2px');
+
+  @media screen and (max-width: 1024px){
+	height: calc(~'100vh - 2px');
+  }
+
+  &-header{
+	//background: #e8e8e8;
+	padding: 30px;
+	padding-top: 40px;
+	padding-left: 50px;
+	position: relative;
+
+
+	.mdo-label.tme-headline{
+	  margin: 0;
+	  font-size: 28px;
+	  font-weight: normal;
+	}
+
+	.tme-subline{
+		font-size: 15px;
+	  	color: #757575;
+	  	margin-top: 10px;
+	}
+
+	.tme-actions{
+	  position: absolute;
+	  top: 10px;
+	  right: 10px;
+
+	  .mdo-button{
+		background: transparent;
+		box-shadow: none;
+		color: rgba(0, 0, 0, 0.54);
+		font-size: 22px;
+		margin: 0;
+		padding: 0;
+		width: 42px;
+		height: 42px;
+		margin-left: 6px;
+		border-radius: 50%;
+
+		&:hover{
+		  background: #fff;
+		}
+	  }
+	}
+  }
+
+  &-content{
+	background: #fff;
+  }
+}

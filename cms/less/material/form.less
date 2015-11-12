@@ -54,7 +54,7 @@
 .mdo-inputtext {
   border: none;
   background: transparent;
-  border-bottom: #aaa solid 3px;
+  border-bottom: #aaa solid 1px;
   outline: none;
   padding: 10px;
   box-sizing: border-box;
@@ -64,7 +64,6 @@
   -webkit-appearance: none;
   border-radius: 0;
   width: 100%;
-
   transition: border-color .5s;
 
   &.tme-w50 {
@@ -79,7 +78,10 @@
 
   &.mdo-inputtext-textarea {
 	resize: none;
-	line-height: 1em;
+	overflow: hidden;
+	line-height: 1.6em;
+	font-family: Roboto, Arial, Helvetica, sans-serif;
+	font-size: 16px;
   }
 
   &.mdo-autogrow {
@@ -195,12 +197,6 @@
 	border-width: 1px;
 	font-family: Roboto, Arial, Helvetica, sans-serif;
 
-	background-image: url(../img/icons/tick.svg);
-	background-repeat: no-repeat;
-	background-position: right top;
-	background-size: 0;
-	transition: background-size .3s;
-
 	&:focus {
 	  border-color: @accent;
 	}
@@ -221,7 +217,6 @@
 	  border-bottom-color: @success;
 	  transition: border-color .5s;
 	  position: relative;
-	  background: url(../img/icons/tick.svg) right center no-repeat;
 	}
   }
 
