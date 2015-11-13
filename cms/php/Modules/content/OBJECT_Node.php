@@ -235,6 +235,70 @@ class Node
 		$this->dbSync = TRUE;
 	}
 
+	function updateContent($key, $index, $value)
+	{
+		$key = explode('.', $key);
+		if (!$this->content) {
+			$this->content = array();
+		}
+
+		$this->content = $this->recursiveUpdate($this->content, $key, $index, $value);
+	}
+
+	private function recursiveUpdate($object, $key, $index, $value)
+	{
+		$currentKey = array_shift($key);
+		if (isset($object[$currentKey])) {
+			$currentObject = $object[$currentKey];
+		}
+
+		if (count($key)) { //Need to go deeper?
+			$object[$currentKey] = $this->recursiveUpdate(isset($currentObject) ? $currentObject : array(), $key, $index, $value);
+			return $object;
+		}
+
+		if ($index == -1 && $value == -8646543) {
+			if (isset($object[$currentKey])) {
+				unset($object[$currentKey]);
+			}
+			return $object;
+		}
+
+		if ($index > -1 && $value == -8646543) {
+			if (is_array($currentObject)) {
+				array_splice($currentObject, $index, 1);
+			}
+			$object[$currentKey] = $currentObject;
+			return $object;
+		}
+
+		if($index == -1){
+			$currentObject = $value;
+			$object[$currentKey] = $currentObject;
+			return $object;
+		}
+
+		if(!isset($currentObject)){
+			$currentObject = NULL;
+		}
+
+		if(!is_array($currentObject)){
+			$currentObject = array($currentObject);
+		}
+
+		//Fill the array, if it has missing indexes in between.
+		if(count($currentObject) < $index){
+			for($i = count($currentObject); $i < $index; $i++){
+				$currentObject[] = NULL;
+			}
+		}
+
+		$currentObject[$index] = $value;
+
+		$object[$currentKey] = $currentObject;
+		return $object;
+	}
+
 	/**
 	 * Fetches all nodes on the root and second level of the website to be able to quickly render the page tree on the left
 	 * side of the CMS backend.
@@ -256,10 +320,11 @@ class Node
 	 * @param [$parentNode=NULL]
 	 * @return bool
 	 */
-	public static function exists($identifier, $parentNode = NULL){
+	public static function exists($identifier, $parentNode = NULL)
+	{
 		global $db;
 
-		if($parentNode){
+		if ($parentNode) {
 			$sql = 'SELECT id FROM ' . self::$dbTable . ' WHERE urlFragment = ' . $db->escape($identifier) . ' AND parentId = ' . (int)$parentNode . ';';
 		} else {
 			$sql = 'SELECT id FROM ' . self::$dbTable . ' WHERE id = ' . (int)$identifier . ';';
@@ -267,7 +332,7 @@ class Node
 
 		$result = $db->queryValue($sql);
 
-		if($result){
+		if ($result) {
 			return TRUE;
 		}
 		return FALSE;

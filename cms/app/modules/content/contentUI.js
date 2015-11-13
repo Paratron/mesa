@@ -117,7 +117,7 @@ define(['json!modules/content/lang/' + lang.key + '.json', 'central'], function 
 		return dta;
 	}
 
-	function makeForm(struct) {
+	function makeForm(struct, content) {
 		contentUI.frmContent.el.children('*').remove();
 		currentForm = null;
 		changeListener.stopListening();
@@ -150,16 +150,16 @@ define(['json!modules/content/lang/' + lang.key + '.json', 'central'], function 
 					contentUI.frmContent.el.append('<div class="missingContentElementType">[MISSING TYPE: ' + definition.type + ']</div>');
 					continue;
 				}
-				form[key] = new contentElements[definition.type](definition, null);
+				form[key] = new contentElements[definition.type](definition, content[key]);
 				form[key].key = key;
 				contentUI.frmContent.add(form[key].container);
 				(function (key, events, definition) {
-					changeListener.listenTo(events, 'change', function (e) {
-						if (definition.repeat) {
-							console.log('Element updated: ', key, e.index, e.value);
-						} else {
-							console.log('Element updated: ', key, e.value);
-						}
+					//TODO: This callback will always be called twice, hence the debounce. No idea, why.
+					changeListener.listenTo(events, 'change', _.debounce(function (e) {
+						central.get('selectedNode').updateContent(key + (e.key ? '.' + e.key : ''), (definition.repeat ? e.index : undefined), e.value);
+					}, 10));
+					changeListener.listenTo(events, 'remove', function(e){
+						central.get('selectedNode').updateContent(key + (e.key ? '.' + e.key : ''), e.index, undefined);
 					});
 				})(key, form[key].events, definition);
 			}
@@ -175,7 +175,11 @@ define(['json!modules/content/lang/' + lang.key + '.json', 'central'], function 
 		contentUI.nodeInfo.set(n.getPath());
 
 		if (n.get('structKey')) {
-			central.get('structs').get(n.get('structKey')).fetch().then(makeForm).done();
+			n.getContent().then(function(content){
+				central.get('structs').get(n.get('structKey')).fetch().then(function(struct){
+					makeForm(struct, content);
+				}).done();
+			});
 		}
 	}
 

@@ -86,7 +86,9 @@ define([
 								click: function () {
 									var index = elementsList.indexOf(obj);
 									elementsList.splice(elementsList.indexOf(obj), 1);
-									eventProvider.trigger('remove', index);
+									eventProvider.trigger('remove', {
+										index: index
+									});
 									wrapper.el.slideUp('fast', function () {
 										elementsContainer.remove(wrapper);
 										checkCount(elementsContainer, definition);

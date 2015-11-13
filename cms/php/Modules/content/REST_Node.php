@@ -9,7 +9,62 @@ class Node extends RestResponder
 {
 	function GET($requestData, $path)
 	{
+		if (!count($path)) {
+			return NULL;
+		}
 
+		if (isset($path[0])) {
+			$nodeId = (int)$path[0];
+		} else {
+			throw new RestError('Invalid node id given', 12);
+		}
+
+		try {
+			$node = new \CMS\Objects\Node($nodeId);
+		} catch (\ErrorException $e) {
+			throw new RestError('Node not found', 13, $nodeId);
+		}
+
+		return $node->content ? $node->content : NULL;
+	}
+
+	function PUT($requestData, $path)
+	{
+		if (!count($path)) {
+			return NULL;
+		}
+
+		if (isset($path[0])) {
+			$nodeId = (int)$path[0];
+		} else {
+			throw new RestError('Invalid node id given', 12);
+		}
+
+		try {
+			$node = new \CMS\Objects\Node($nodeId);
+		} catch (\ErrorException $e) {
+			throw new RestError('Node not found', 13, $nodeId);
+		}
+
+		$input = \Kiss\Utils::array_clean($requestData, array(
+			'key' => 'string|trim',
+			'index' => 'int',
+			'value' => 'string'
+		));
+
+		if(!isset($requestData['index'])){
+			$input['index'] = -1;
+		}
+
+		$input['value'] = json_decode($input['value'], TRUE);
+		if(json_last_error() !== JSON_ERROR_NONE){
+			throw new RestError('Invalid field value given');
+		}
+
+		$node->updateContent($input['key'], $input['index'], $input['value']);
+		$node->save();
+
+		return TRUE;
 	}
 
 	function POST($requestData, $path)
@@ -39,13 +94,13 @@ class Node extends RestResponder
 
 		//Check if parent node exists.
 		if ($requestData['parentId']) {
-			if(\CMS\Objects\Node::exists($requestData['parentId']) === FALSE){
+			if (\CMS\Objects\Node::exists($requestData['parentId']) === FALSE) {
 				throw new RestError('Parent node doesnt exist', 10);
 			}
 		}
 
 		//Check if there is another node with the same urlFragment on this level.
-		if(\CMS\Objects\Node::exists($requestData['urlFragment'], $requestData['parentId'])){
+		if (\CMS\Objects\Node::exists($requestData['urlFragment'], $requestData['parentId'])) {
 			throw new RestError('Another node with this urlFragment exists on this level', 11);
 		}
 

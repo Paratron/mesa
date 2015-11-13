@@ -140,7 +140,8 @@
 					'font-size': that._inputEl.el.css('font-size'),
 					'line-height': that._inputEl.el.css('line-height'),
 					'width': that._inputEl.el.width()
-				});
+				}).html(that._inputEl.el.val().replace(/\n/g, '<br>') + '<br>');
+				that._inputEl.el.height(clone[0].scrollHeight);
 			});
 			that.el.append(cloneKeeper);
 		}
