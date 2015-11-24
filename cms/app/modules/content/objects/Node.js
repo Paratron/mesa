@@ -68,11 +68,11 @@ define([], function () {
 		/**
 		 * Will update certain parts of the content on the server.
 		 */
-		updateContent: function (key, index, value) {
+		updateContent: function (key, value) {
 			if (!this.attributes.content) {
 				this.attributes.content = {};
 			}
-			this.attributes.content = recursiveUpdate(this.attributes.content, key.split('.'), index, value);
+			this.attributes.content = recursiveUpdate(this.attributes.content, key.split('.'), value);
 
 			var defer = Q.defer(),
 				that = this;
@@ -80,7 +80,6 @@ define([], function () {
 			require(['modules/restapi'], function (api) {
 				api('PUT', '/node/' + that.id + '/content', {
 					key: key,
-					index: index,
 					value: value === undefined ? -8646543 : JSON.stringify(value)
 				}).then(function(){
 					defer.resolve();
@@ -100,21 +99,28 @@ define([], function () {
 	 * @param value
 	 * @returns {*}
 	 */
-	function recursiveUpdate(object, key, index, value) {
+	function recursiveUpdate(object, key, value) {
+		var index = null;
 		var currentKey = key.shift();
+
+		if(index = currentKey.match(/^(.+?)\[(\d+)\]$/)){
+			currentKey = index[1];
+			index = index[2];
+		}
+
 		var currentObject = object[currentKey];
 
 		if (key.length) { //Need to go deeper?
-			object[currentKey] = recursiveUpdate(currentObject, key, index, value);
+			object[currentKey] = recursiveUpdate(currentObject, key, value);
 			return object;
 		}
 
-		if (index === undefined && value === undefined) {
+		if (index === null && value === undefined) {
 			delete object[currentKey];
 			return object;
 		}
 
-		if (index !== undefined && value === undefined) {
+		if (index !== null && value === undefined) {
 			if (currentObject instanceof Array) {
 				currentObject.splice(index, 1);
 			}
@@ -122,7 +128,7 @@ define([], function () {
 			return object;
 		}
 
-		if (index === undefined) {
+		if (index === null) {
 			currentObject = value;
 			object[currentKey] = currentObject;
 			return object;

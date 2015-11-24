@@ -1,7 +1,8 @@
 /**
  * simpleText
  * ===========
- * description
+ * A simpleText is used to collect simple, unformatted text input from a user.
+ * The text can be one-lined, or multilined - configure it with the options parameter.
  */
 'use strict';
 

@@ -150,16 +150,16 @@ define(['json!modules/content/lang/' + lang.key + '.json', 'central'], function 
 					contentUI.frmContent.el.append('<div class="missingContentElementType">[MISSING TYPE: ' + definition.type + ']</div>');
 					continue;
 				}
-				form[key] = new contentElements[definition.type](definition, content[key]);
+				form[key] = new contentElements[definition.type](definition, content[key], contentElements);
 				form[key].key = key;
 				contentUI.frmContent.add(form[key].container);
 				(function (key, events, definition) {
 					//TODO: This callback will always be called twice, hence the debounce. No idea, why.
 					changeListener.listenTo(events, 'change', _.debounce(function (e) {
-						central.get('selectedNode').updateContent(key + (e.key ? '.' + e.key : ''), (definition.repeat ? e.index : undefined), e.value);
+						central.get('selectedNode').updateContent(key + (definition.repeat ? '[' + e.index + ']' : '') + (e.key ? '.' + e.key : ''), e.value);
 					}, 10));
 					changeListener.listenTo(events, 'remove', function(e){
-						central.get('selectedNode').updateContent(key + (e.key ? '.' + e.key : ''), e.index, undefined);
+						central.get('selectedNode').updateContent(key + '[' + e.index + ']' + (e.key ? '.' + e.key : ''), undefined);
 					});
 				})(key, form[key].events, definition);
 			}

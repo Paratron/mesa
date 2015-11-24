@@ -2,38 +2,34 @@
 /**
  * This is responsible for the frontend-redering of the website.
  */
+$mesaConfig = parse_ini_file('lib/data/config.ini');
 
-require 'Slim/Slim.php';
-\Slim\Slim::registerAutoloader();
+require 'Kiss/KeyValueWrapper.php';
 
-
-$app = new \Slim\Slim(array(
-		'view' => new \Slim\Views\Twig()
-));
-
-
-$view = $app->view();
-$view->setTemplatesDirectory('lib/templates');
-$view->parserOptions = array(
-		//'cache' => 'lib/cache/twig'
-);
-
-require 'lib/config/routes.php';
-
-foreach($routes['get'] as $route => $template){
-	$app->get($route, function() use ($app){
-		$route = $app->router()->getCurrentRoute();
-		$route = $route->getPattern();
-
-		global $routes;
-
-		if(!isset($routes['get'][$route])){
-			$app->notFound();
-			return;
-		}
-
-		$app->render($routes['get'][$route]);
-	});
+$cache = NULL;
+if($mesaConfig['cache'] === 'harddrive'){
+	require 'Kiss/KVWrappers/Filesystem.php';
+	$cache = new \Kiss\KVWrappers\Filesystem($mesaConfig['cacheFolder']);
+}
+if($mesaConfig['cache'] === 'memcached'){
+	require 'Kiss/KVWrappers/Memcached.php';
+	$cache = new \Kiss\KVWrappers\Memcached();
+}
+if(!$cache){
+	require 'Kiss/KVWrappers/Nullcache.php';
+	$cache = new \Kiss\KVWrappers\Nullcache();
 }
 
-$app->run();
+$requestURI = str_replace(dirname($_SERVER['SCRIPT_NAME']), '', $_SERVER['REQUEST_URI']);
+
+$document = $cache->get('page_' . $requestURI);
+if($document){
+	die($document);
+}
+
+require 'Kiss/SQLite.php';
+$db = new \Kiss\SQLite('lib/data/content.s3db');
+
+$requestURI = explode('/', $requestURI);
+
+die('<pre>' . print_r($_SERVER, TRUE));

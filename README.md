@@ -3,8 +3,11 @@ Mesa CMS
 
 ![The mesa logo](logo/logo128.png)
 
-This CMS aims to be a easy to use, yet flexible CMS that helps building simple to complex websites while providing
+This aims to be an easy to use, yet flexible CMS that helps building simple to complex websites while providing
 a clear, understandable UI for the people who need to maintain the website in the end.
+
+__BE CAREFUL!__    
+This is software is in a very very early alpha stage. You can assume everything to be broken/not working right now :)
 
 Other CMS force a developer to build a website from pre-created content blocks in a certain way the system dictates.
 Mesa goes a different way and enables the developer to use the editors he is used to and structure their websites in their

@@ -235,25 +235,32 @@ class Node
 		$this->dbSync = TRUE;
 	}
 
-	function updateContent($key, $index, $value)
+	function updateContent($key, $value)
 	{
 		$key = explode('.', $key);
 		if (!$this->content) {
 			$this->content = array();
 		}
 
-		$this->content = $this->recursiveUpdate($this->content, $key, $index, $value);
+		$this->content = $this->recursiveUpdate($this->content, $key, $value);
 	}
 
-	private function recursiveUpdate($object, $key, $index, $value)
+	private function recursiveUpdate($object, $key,  $value)
 	{
+		$index = -1;
 		$currentKey = array_shift($key);
+
+		if(preg_match('|^(.+?)\[(\d+)\]$|', $currentKey, $matches)){
+			$currentKey = $matches[1];
+			$index = (int)$matches[2];
+		}
+
 		if (isset($object[$currentKey])) {
 			$currentObject = $object[$currentKey];
 		}
 
 		if (count($key)) { //Need to go deeper?
-			$object[$currentKey] = $this->recursiveUpdate(isset($currentObject) ? $currentObject : array(), $key, $index, $value);
+			$object[$currentKey] = $this->recursiveUpdate(isset($currentObject) ? $currentObject : array(), $key, $value);
 			return $object;
 		}
 
@@ -265,7 +272,7 @@ class Node
 		}
 
 		if ($index > -1 && $value == -8646543) {
-			if (is_array($currentObject)) {
+			if (isset($currentObject[0])) { //Test for numeric array
 				array_splice($currentObject, $index, 1);
 			}
 			$object[$currentKey] = $currentObject;

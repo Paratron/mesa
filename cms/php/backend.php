@@ -1,5 +1,8 @@
 <?php
 
+$mesaConfig = parse_ini_file('../lib/data/config.ini');
+
+
 require 'Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 
@@ -7,7 +10,19 @@ $app = new \Slim\Slim(array(
 		'view' => new \Slim\Views\Twig()
 ));
 
-$cache = new \Kiss\KVWrappers\Filesystem('../lib/data/cache');
+$cache = NULL;
+if($mesaConfig['cache'] === 'harddrive'){
+	require 'Kiss/KVWrappers/Filesystem.php';
+	$cache = new \Kiss\KVWrappers\Filesystem('../' . $mesaConfig['cacheFolder']);
+}
+if($mesaConfig['cache'] === 'memcached'){
+	require 'Kiss/KVWrappers/Memcached.php';
+	$cache = new \Kiss\KVWrappers\Memcached();
+}
+if(!$cache){
+	require 'Kiss/KVWrappers/Nullcache.php';
+	$cache = new \Kiss\KVWrappers\Nullcache();
+}
 
 $db = new \Kiss\SQLite('../lib/data/content.s3db');
 

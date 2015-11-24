@@ -9,16 +9,22 @@
 define([
 	'json!modules/content/lang/' + lang.key + '.json'
 ], function (mLang) {
+	var contentElementPool;
+
 	/**
 	 * Content elements need to take this method and pass their element factory method
 	 * as first parameter.
 	 * The method will then return the method that can be used by the form generator.
 	 * @param function elementFactory Method that returns a get/set enabled modo element.
-	 * @param string [className] Optional CSS class to be added to the outer container of the content element.
+	 * @param object [inOptions] Object with additional options for this content element.
+	 * @param string [inOptions.className] Optional CSS class to be added to the outer container of the content element.
+	 * @param bool   [inOptions.provideContentElements=false] Set to true, if the element needs access to other element constructors. A property "contentElements" will be added to the options object.
 	 */
-	return function (elementFactory, className) {
-		if (!className) {
-			className = '';
+	return function (elementFactory, inOptions) {
+		inOptions = inOptions || {};
+
+		if (!inOptions.className) {
+			inOptions.className = '';
 		}
 
 		/**
@@ -102,7 +108,16 @@ define([
 				wrapper.add(buttonKeeper);
 			}
 
+			if(inOptions.provideContentElements){
+				definition.options = definition.options || {};
+				definition.options.contentElements = contentElementPool;
+			}
+
 			element = elementFactory(definition.options || {}, definition);
+
+			if(inOptions.className){
+				element.el.addClass(inOptions.className);
+			}
 
 			if(!definition.repeat){
 				wrapper.addClass('firstElement', false);
@@ -131,7 +146,7 @@ define([
 
 			elementsList.push(obj);
 
-			element.on('change', function () {
+			element.on('change', function (e) {
 				eventProvider.trigger('change', {
 					index: elementsList.indexOf(obj),
 					value: element.get()
@@ -143,10 +158,12 @@ define([
 		 * This is the actual constructor for elements. It can be passed
 		 * to the form builder who will create elements for each content field.
 		 */
-		return function (definition, data) {
+		return function (definition, data, contentElements) {
 			if (!data) {
 				data = '';
 			}
+
+			contentElementPool = contentElements;
 
 			var elements = [];
 
@@ -156,7 +173,7 @@ define([
 			 * @type {modo.Container}
 			 */
 			var container = new modo.Container({
-				className: 'contentElement ' + className
+				className: 'contentElement'
 			});
 
 			var addButton, eventProvider;
@@ -223,13 +240,13 @@ define([
 
 					return elements[0].element.get();
 				},
-				set: function (inData) {
+				set: function (inData, options) {
 					var i;
 
 					if (definition.repeat) {
 						for (i = 0; i < inData.length; i++) {
 							if (elements[i]) {
-								elements[i].set(inData[i]);
+								elements[i].set(inData[i], options);
 							} else {
 								makeElement(definition, container, elements, inData[i]);
 							}
@@ -237,7 +254,7 @@ define([
 						return;
 					}
 
-					elements[0].set(inData);
+					elements[0].element.set(inData, options);
 				}
 			};
 		}

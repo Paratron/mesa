@@ -48,20 +48,15 @@ class Node extends RestResponder
 
 		$input = \Kiss\Utils::array_clean($requestData, array(
 			'key' => 'string|trim',
-			'index' => 'int',
 			'value' => 'string'
 		));
-
-		if(!isset($requestData['index'])){
-			$input['index'] = -1;
-		}
 
 		$input['value'] = json_decode($input['value'], TRUE);
 		if(json_last_error() !== JSON_ERROR_NONE){
 			throw new RestError('Invalid field value given');
 		}
 
-		$node->updateContent($input['key'], $input['index'], $input['value']);
+		$node->updateContent($input['key'], $input['value']);
 		$node->save();
 
 		return TRUE;

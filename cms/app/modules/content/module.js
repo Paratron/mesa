@@ -61,9 +61,13 @@ define([
 		getContentElements: function(){
 			var defer = Q.defer();
 
-			require(['modules/content/contentElements/simpleText'], function(simpleText){
+			require([
+				'modules/content/contentElements/simpleText',
+				'modules/content/contentElements/group'
+			], function(simpleText, group){
 				defer.resolve({
-					'simpleText': simpleText
+					'simpleText': simpleText,
+					'group': group
 				});
 			});
 
