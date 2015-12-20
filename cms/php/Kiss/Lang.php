@@ -12,21 +12,25 @@
 
 namespace Kiss;
 
-class Lang {
+class Lang
+{
     private $langKey = 'en';
     private static $langDefault = 'en';
     private $viewName = '';
     private $basePath;
 
-    function __construct($basePath = 'lib/lang/'){
+    function __construct($basePath = 'lib/lang/')
+    {
         $this->basePath = $basePath;
     }
 
-    public function setLang($lang_name) {
+    public function setLang($lang_name)
+    {
         $this->langKey = $lang_name;
     }
 
-    public function setView($viewName) {
+    public function setView($viewName)
+    {
         $this->viewName = $viewName;
     }
 
@@ -42,15 +46,15 @@ class Lang {
      * @throws \ErrorException
      * @return mixed|string
      */
-    function get($key, $data = array()) {
+    function get($key, $data = array())
+    {
         //Look if it targets a specific view.
         $p = explode(':', $key);
         if (count($p) == 2) {
             //view has been selected
             $viewName = $p[0];
             $key = $p[1];
-        }
-        else {
+        } else {
             $key = $p[0];
             $viewName = $this->viewName;
         }
@@ -60,12 +64,10 @@ class Lang {
 
         if (file_exists($this->basePath . $this->langKey . '/' . $viewName . '.json')) {
             $file = $this->basePath . $this->langKey . '/' . $viewName . '.json';
-        }
-        else {
+        } else {
             if (file_exists($this->basePath . self::$langDefault . '/' . $viewName . '.json')) {
                 $file = $this->basePath . self::$langDefault . '/' . $viewName . '.json';
-            }
-            else {
+            } else {
                 return '[View not found]';
             }
         }
@@ -105,17 +107,16 @@ class Lang {
      * @return mixed|null
      * @throws \ErrorException
      */
-    function getJSON() {
+    function getJSON()
+    {
         $viewName = $this->viewName;
 
         if (file_exists($this->basePath . $this->langKey . '/' . $viewName . '.json')) {
             $file = $this->basePath . $this->langKey . '/' . $viewName . '.json';
-        }
-        else {
+        } else {
             if (file_exists($this->basePath . $this->langDefault . '/' . $viewName . '.json')) {
                 $file = $this->basePath . $this->langDefault . '/' . $viewName . '.json';
-            }
-            else {
+            } else {
                 return NULL;
             }
         }
@@ -135,7 +136,8 @@ class Lang {
      * @param {Array} [$fillData] Some additional data to replace placeholders inside lang strings with.
      * @return mixed
      */
-    function fillPlaceholders($inputString, $fillData = array()) {
+    function fillPlaceholders($inputString, $fillData = array())
+    {
         preg_match_all('#\{\{ (.+?) \}\}#', $inputString, $matches);
 
         foreach ($matches[1] as $v) {
@@ -149,22 +151,23 @@ class Lang {
      * Fetches the desired language of the visitor by analyzing his request headers.
      * @return string {String} Two character representation of the language.
      */
-    function determine(){
-		if(!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
-			return 'en';
-		}
+    function determine()
+    {
+        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            return 'en';
+        }
 
         $langs = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
         $langs = explode(',', $langs);
 
-        foreach($langs as $v){
-			if(strlen($v) == 5){
-				$v = explode('-', $v);
-				$v = $v[0];
-			}
+        foreach ($langs as $v) {
+            if (strlen($v) == 5) {
+                $v = explode('-', $v);
+                $v = $v[0];
+            }
 
-            if(strlen($v) == 2){
-                if(file_exists($this->basePath . $v)){
+            if (strlen($v) == 2) {
+                if (file_exists($this->basePath . $v)) {
                     return $v;
                 }
             }
@@ -173,27 +176,34 @@ class Lang {
         return self::$langDefault;
     }
 
-	static function determineStatic(){
-		if(!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
-			return 'en';
-		}
+    static function determineStatic($existingLanguages = NULL, $fallbackLanguage = 'en')
+    {
+        if (!isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+            return $fallbackLanguage;
+        }
 
-		$langs = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-		$langs = explode(',', $langs);
+        $langs = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+        $langs = explode(',', $langs);
 
-		foreach($langs as $v){
-			if(strlen($v) == 5){
-				$v = explode('-', $v);
-				$v = $v[0];
-			}
+        foreach ($langs as $v) {
+            if (strlen($v) == 5) {
+                $v = explode('-', $v);
+                $v = $v[0];
+            }
 
-			if(strlen($v) == 2){
-				if(file_exists('lib/lang/' . $v)){
-					return $v;
-				}
-			}
-		}
+            if (strlen($v) == 2) {
+                if ($existingLanguages) {
+                    if (in_array($v, $existingLanguages)) {
+                        return $v;
+                    }
+                } else {
+                    if (file_exists('lib/lang/' . $v)) {
+                        return $v;
+                    }
+                }
+            }
+        }
 
-		return self::$langDefault;
-	}
+        return $fallbackLanguage;
+    }
 }

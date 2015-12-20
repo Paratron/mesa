@@ -48,6 +48,10 @@ define([
 
 		for (var key in c) {
 			cDef = c[key];
+			if(cDef.type === undefined){
+				cDef.type = 'simpleText';
+			}
+
 			if (contentElements[cDef.type] === undefined) {
 				container.el.append('<div class="missingContentElementType">[MISSING TYPE: ' + cDef.type + ']</div>');
 				continue;

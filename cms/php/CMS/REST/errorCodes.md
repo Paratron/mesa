@@ -29,6 +29,10 @@ Node Error Codes
 12: Invalid node id given
 13: Node not found
 
+###Node actions
+14: Missing action
+15: Invalid action
+
 
 Struct Error Codes
 ------------------

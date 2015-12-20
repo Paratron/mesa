@@ -25,7 +25,8 @@ define([], function () {
 			modificationTime: 0,
 			creatorId: 0,
 			modificatorId: 0,
-			parentNode: null
+			parentNode: null,
+            needsPublish: false
 		},
 		initialize: function () {
 			if (this.attributes.parentId) {
@@ -57,7 +58,8 @@ define([], function () {
 					if (!result) {
 						that.attributes.content = {};
 					} else {
-						that.attributes.content = result;
+						that.attributes.content = result.content;
+                        that.set('needsPublish', result.needsPublish);
 					}
 					defer.resolve(that.attributes.content);
 				}).done();
@@ -81,13 +83,33 @@ define([], function () {
 				api('PUT', '/node/' + that.id + '/content', {
 					key: key,
 					value: value === undefined ? -8646543 : JSON.stringify(value)
-				}).then(function(){
+				}).then(function(result){
+                    that.set('needsPublish', result.needsPublish);
 					defer.resolve();
 				});
 			});
 
 			return defer.promise;
-		}
+		},
+        /**
+         * This will copy all contents from the content to liveContent field to publish the data
+         * to let it actually appear on the website.
+         */
+        publish: function(){
+            var that = this,
+                defer = Q.defer();;
+
+            require(['modules/restapi'], function (api) {
+               api('POST', '/node/' + that.id + '/publish').then(function(result){
+                   if(result){
+                       that.set('needsPublish', false);
+                       defer.resolve();
+                   }
+               });
+            });
+
+            return defer.promise;
+        }
 	});
 
 	/**
