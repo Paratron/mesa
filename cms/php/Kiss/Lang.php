@@ -39,7 +39,7 @@ class Lang
      * When you have set to a specific view before, you can simply fetch values like this:
      * "my_object.my_key", or directly "my_key".
      *
-     * If you want to recieve something from a specific view, call "viewname:my_key".
+     * If you want to receive something from a specific view, call "viewname:my_key".
      *
      * @param {string} $key The string selector.
      * @param array $data

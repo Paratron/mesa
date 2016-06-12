@@ -190,7 +190,7 @@
 			/**
 			 * Calls the check function that has been provided in the constructor parameters (params.check), or set by
 			 * overwriting the this._checkFunction
-			 * The function will be auto-promised. Return something to fullfill it, throw an error to make it fail.
+			 * The function will be auto-promised. Return something to fulfill it, throw an error to make it fail.
 			 */
 			check: function (options) {
 				options = options || {};
@@ -224,7 +224,7 @@
 			/**
 			 * Will call the save function, provided in the constructor parameters (params.save), or set by
 			 * overwriting this._saveFunction
-			 * The function will be auto-promised. Return something to fullfill it, throw an error to make it fail.
+			 * The function will be auto-promised. Return something to fulfill it, throw an error to make it fail.
 			 */
 			save: function () {
 				var that = this;
