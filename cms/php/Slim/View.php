@@ -236,7 +236,7 @@ class View
      * This method echoes the rendered template to the current output buffer
      *
      * @param  string   $template   Pathname of template file relative to templates directory
-     * @param  array    $data       Any additonal data to be passed to the template.
+     * @param  array    $data       Any additional data to be passed to the template.
      */
     public function display($template, $data = null)
     {
@@ -247,7 +247,7 @@ class View
      * Return the contents of a rendered template file
      *
      * @param    string $template   The template pathname, relative to the template base directory
-     * @param    array  $data       Any additonal data to be passed to the template.
+     * @param    array  $data       Any additional data to be passed to the template.
      * @return string               The rendered template
      */
     public function fetch($template, $data = null)
@@ -261,7 +261,7 @@ class View
      * NOTE: This method should be overridden by custom view subclasses
      *
      * @param  string $template     The template pathname, relative to the template base directory
-     * @param  array  $data         Any additonal data to be passed to the template.
+     * @param  array  $data         Any additional data to be passed to the template.
      * @return string               The rendered template
      * @throws \RuntimeException    If resolved template pathname is not a valid file
      */

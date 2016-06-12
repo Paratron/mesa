@@ -32,7 +32,7 @@ class Utils {
 	 * email    If the given value is no e-mail, it becomes NULL
 	 * array    Convert the value into an array (heads up: its combinable with integer => "array|integer")
 	 * boolean  Convert the value into boolean true/false. (Will also convert a string "true" or "false" correctly)
-	 * regex    Apply a regex to the value and use the occurance, or NULL
+	 * regex    Apply a regex to the value and use the occurrence, or NULL
 	 *          Use groups in your regex and pass a number as third parameter to the regex call to extract the given group.
 	 *          Use groups and pass "extract" as third parameter, to get an array with all group contents.
 	 *
