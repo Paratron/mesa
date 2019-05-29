@@ -1,21 +1,24 @@
 {
-  "name": "Mesa",
-  "version": "0.0.1",
-  "description": "",
-  "main": "gruntfile.js",
-  "dependencies": {},
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-less": "^0.12.0",
-    "grunt-contrib-copy": "^0.7.0"
-  },
+  "name": "mesa",
+  "version": "1.0.0",
+  "description": "Create data centered backends for your app or use it as a headless CMS.",
+  "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@bitbucket.org:paratron/cms.git"
+  "author": "Christian Engel <christian.engel@wearekiss.com>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bcrypt": "3.0.6",
+    "body-parser": "1.18.3",
+    "chalk": "2.4.2",
+    "express": "4.16.4",
+    "multer": "1.4.1",
+    "socket.io": "2.2.0",
+    "uuid": "3.3.2"
   },
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
 }
