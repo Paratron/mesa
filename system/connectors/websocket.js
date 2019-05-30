@@ -76,10 +76,10 @@ module.exports = {
 									sessions[socket.id].user = result;
 									log('´gRPC OK', JSON.stringify(result, null, 2));
 									if(args.admin){
-										if(tools.hasRight(user, 'admin')){
+										if(tools.hasRight(result, 'admin')){
 											result.discoveryData = discoveryData;
 										} else {
-											const err = errors.missingRight('admin');
+											const err = errors.noAdmin();
 											log('´rRPC ERROR', err);
 											respondError(callback, err);
 											return;

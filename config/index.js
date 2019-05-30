@@ -1,7 +1,11 @@
 const mesa = require('../system');
 
 mesa.setMetaData({
-	title: 'Nähdatenbank'
+	title: 'Nähdatenbank',
+	adminContact: {
+		mail: 'hello@wearekiss.com',
+		registerSubject: 'Mesa Access'
+	}
 });
 
 mesa.useStore('data', mesa.stores.simple);
