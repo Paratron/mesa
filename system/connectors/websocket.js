@@ -24,7 +24,8 @@ module.exports = {
 			callProcedure,
 			receiveBroadcast,
 			config,
-			log
+			log,
+			tools
 		}
 	) => new Promise((resolve, reject) => {
 		const http = require('http');
@@ -74,7 +75,16 @@ module.exports = {
 									delete result.password;
 									sessions[socket.id].user = result;
 									log('´gRPC OK', JSON.stringify(result, null, 2));
-									result.discoveryData = discoveryData;
+									if(args.admin){
+										if(tools.hasRight(user, 'admin')){
+											result.discoveryData = discoveryData;
+										} else {
+											const err = errors.missingRight('admin');
+											log('´rRPC ERROR', err);
+											respondError(callback, err);
+											return;
+										}
+									}
 									respondSuccess(callback, result);
 								} catch (e) {
 									log('´rRPC ERROR', e);

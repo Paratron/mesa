@@ -58,7 +58,7 @@ mesa.declareEntity(
 		 * this data type. Only mentioned fields will be rendered and the order will
 		 * honored as well.
 		 */
-		adminFields: {
+		adminOverview: {
 			id: true,
 			creationTime: true,
 			modificationTime: true,
@@ -68,7 +68,7 @@ mesa.declareEntity(
 			},
 			url: {
 				title: 'Linkziel',
-				component: 'Link'
+				component: mesa.adminComponents.overview.Link
 			}
 		}
 	}

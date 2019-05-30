@@ -20,6 +20,13 @@ const connectors = {
 	websocket: 'websocket'
 };
 
+const adminComponents = {
+	overview: {
+		Link: 'Link',
+		Date: 'Date'
+	}
+};
+
 /**
  * Registers a new (data) entity within the mesa declarations.
  * This declaration contains information for the store, procedure
@@ -249,6 +256,7 @@ const boot = async () => {
 			metaData,
 			declarations,
 			procedures,
+			tools,
 			callProcedure,
 			receiveBroadcast: broadcast.receive,
 			config,
@@ -265,6 +273,7 @@ const boot = async () => {
 module.exports = {
 	stores,
 	connectors,
+	adminComponents,
 	setMetaData,
 	declareEntity,
 	useStore,

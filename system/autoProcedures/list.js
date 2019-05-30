@@ -1,3 +1,5 @@
+const errors = require('../errors');
+
 /**
  * This is an automatic procedure to create new entities of a declared data type
  * in the store. The first call is the _pre-initialize_ call and should not yet create any data.
